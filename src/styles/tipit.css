@@ -1,0 +1,373 @@
+/* ==========================================================================
+   tipit — shared design tokens + app-shell primitives
+   Token values mirror the ones embedded in pages/landing.jsx so the
+   dashboard, auth, and onboarding screens read as the same product.
+   Component styles here are scoped under .tipit-app to avoid touching
+   the landing page, which ships its own scoped styles.
+   ========================================================================== */
+
+:root {
+  --cream: #f9f5ea;
+  --cream-deep: #f0e7d6;
+  --paper: #ffffff;
+
+  --ink: #111116;
+  --ink-soft: #55545a;
+  --ink-faint: #8b8880;
+
+  --coral: #f76356;
+  --coral-deep: #e94b3e;
+  --coral-tint: #f8c4bb;
+
+  --gold: #ecc225;
+  --gold-deep: #b99000;
+  --gold-tint: #f8e6a0;
+
+  --teal: #24705f;
+  --teal-deep: #185244;
+  --teal-tint: #d1e7df;
+
+  --navy: #111116;
+  --navy-raised: #1a1a20;
+
+  --line: rgba(17, 17, 22, 0.16);
+  --line-soft: rgba(17, 17, 22, 0.09);
+
+  --shadow-soft: 0 2px 4px rgba(17, 17, 22, 0.08),
+    0 14px 30px -14px rgba(17, 17, 22, 0.25);
+  --shadow-pop: 3px 3px 0 #111116;
+
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "Space Mono", "Courier New", monospace;
+
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+}
+
+/* --------------------------------------------------------------- app shell */
+
+.tipit-app {
+  min-height: 100svh;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.tipit-app *,
+.tipit-app *::before,
+.tipit-app *::after {
+  box-sizing: border-box;
+}
+.tipit-app a {
+  color: inherit;
+}
+.tipit-app button {
+  font-family: inherit;
+  cursor: pointer;
+}
+.tipit-app :focus-visible {
+  outline: 2.5px solid var(--coral-deep);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tipit-app *,
+  .tipit-app *::before,
+  .tipit-app *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.tipit-wrap {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+  padding-inline: clamp(18px, 5vw, 48px);
+}
+
+/* --------------------------------------------------------------- typography */
+
+.tipit-app h1,
+.tipit-app h2,
+.tipit-app h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--ink);
+}
+.tipit-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--coral-deep);
+}
+.tipit-eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+.tipit-mono {
+  font-family: var(--font-mono);
+}
+.tipit-muted {
+  color: var(--ink-faint);
+}
+
+/* --------------------------------------------------------------- buttons */
+
+.tipit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius-pill);
+  padding: 12px 22px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1;
+  border: 1.5px solid transparent;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease,
+    color 0.15s ease;
+}
+.tipit-btn:active {
+  transform: translateY(1px);
+}
+.tipit-btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.tipit-btn-primary {
+  background: var(--ink);
+  color: var(--cream);
+  box-shadow: var(--shadow-pop);
+}
+.tipit-btn-primary:hover:not([disabled]) {
+  background: var(--coral-deep);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.tipit-btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: rgba(17, 17, 22, 0.22);
+}
+.tipit-btn-ghost:hover:not([disabled]) {
+  border-color: var(--ink);
+  background: rgba(17, 17, 22, 0.04);
+}
+.tipit-btn-sm {
+  padding: 9px 16px;
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------- audience toggle */
+
+.audience-toggle {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  background: var(--cream-deep);
+  border-radius: var(--radius-pill);
+  margin-bottom: 6px;
+}
+.audience-toggle-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink-faint);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.audience-toggle-btn:hover:not(.is-active) {
+  color: var(--ink);
+}
+.audience-toggle-btn.is-active {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+/* --------------------------------------------------------------- fields */
+
+.tipit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tipit-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.tipit-input,
+.tipit-textarea {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--paper);
+  transition: border-color 0.15s ease;
+}
+.tipit-input:focus,
+.tipit-textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+.tipit-textarea {
+  resize: vertical;
+  min-height: 76px;
+}
+.tipit-input-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 4px 4px 4px 16px;
+  background: var(--paper);
+}
+.tipit-input-group:focus-within {
+  border-color: var(--ink);
+}
+.tipit-input-group span {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.tipit-input-group input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink);
+  padding: 8px 0;
+}
+
+/* --------------------------------------------------------------- cards */
+
+.tipit-card {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: clamp(18px, 3vw, 26px);
+}
+.tipit-card-pop {
+  border-color: var(--ink);
+  box-shadow: var(--shadow-pop);
+}
+
+/* --------------------------------------------------------------- feedback */
+
+.tipit-note {
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.tipit-note-error {
+  background: var(--coral-tint);
+  color: var(--coral-deep);
+}
+.tipit-note-ok {
+  background: var(--teal-tint);
+  color: var(--teal-deep);
+}
+.tipit-note-info {
+  background: var(--gold-tint);
+  color: var(--gold-deep);
+}
+
+.tipit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: var(--radius-pill);
+}
+.tipit-badge-succeeded {
+  background: var(--teal-tint);
+  color: var(--teal-deep);
+}
+.tipit-badge-pending {
+  background: var(--gold-tint);
+  color: var(--gold-deep);
+}
+.tipit-badge-failed {
+  background: var(--coral-tint);
+  color: var(--coral-deep);
+}
+.tipit-badge-processing {
+  background: var(--gold-tint);
+  color: var(--gold-deep);
+}
+.tipit-badge-paid {
+  background: var(--teal-tint);
+  color: var(--teal-deep);
+}
+
+/* --------------------------------------------------------------- centered forms */
+
+.tipit-centered {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 40px 18px;
+}
+.tipit-form-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  padding: clamp(24px, 5vw, 36px);
+}
+.tipit-form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tipit-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--ink);
+}
+.tipit-brand span {
+  color: var(--coral);
+}
