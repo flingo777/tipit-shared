@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  exports:
+    name: Exports resolve
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Both consumers import via the subpath exports map. A typo there breaks
+      # their builds and nothing here would otherwise catch it, since this
+      # package has no build step of its own.
+      - name: Every declared export points at a file that exists
+        run: |
+          node -e '
+            const fs = require("fs");
+            const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+            let bad = 0;
+            for (const [name, target] of Object.entries(pkg.exports)) {
+              if (!fs.existsSync(target)) {
+                console.error(`MISSING  ${name} -> ${target}`);
+                bad++;
+              } else {
+                console.log(`ok       ${name} -> ${target}`);
+              }
+            }
+            if (bad) { console.error(`\n${bad} broken export(s)`); process.exit(1); }
+          '
+
+      # Catches a stale relative import after a file move — the package
+      # flattens everything into src/, so internal paths are all "./x".
+      - name: No parent-directory imports inside the package
+        run: |
+          if grep -rn 'from "\.\./' src; then
+            echo "Package sources must not import from outside src/."
+            exit 1
+          fi
+          echo "ok"
