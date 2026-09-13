@@ -7,17 +7,29 @@
    ========================================================================== */
 
 :root {
-  --cream: #f9f5ea;
-  --cream-deep: #f0e7d6;
+  /* ==========================================================================
+     Palette — the ink/cream system from the 2026-09 landing redesign.
+     Sections alternate deep ink and soft cream; coral is the single accent.
+     Token NAMES are unchanged from the previous theme on purpose, so every
+     screen that already reads var(--coral) / var(--cream) retints itself
+     without touching a line of component code.
+     ========================================================================== */
+  --cream: #f5f0e6;
+  --cream-deep: #eae2d2;
   --paper: #ffffff;
 
-  --ink: #111116;
-  --ink-soft: #55545a;
-  --ink-faint: #8b8880;
+  --ink: #111111;
+  --ink-raised: #1b1b1b;
+  --ink-soft: #5e5e58;
+  --ink-faint: #6f6f6a;
 
-  --coral: #f76356;
-  --coral-deep: #e94b3e;
-  --coral-tint: #f8c4bb;
+  --coral: #ff6b5e;
+  /* Coral fails contrast as text on cream; this is the darkened variant to
+     use for accent TEXT on light backgrounds. Keep --coral for fills. */
+  --coral-deep: #c00f00;
+  --coral-tint: #ffd9d5;
+
+  --blue: #5b7cff;
 
   --gold: #ecc225;
   --gold-deep: #b99000;
@@ -27,24 +39,36 @@
   --teal-deep: #185244;
   --teal-tint: #d1e7df;
 
-  --navy: #111116;
-  --navy-raised: #1a1a20;
+  --navy: #111111;
+  --navy-raised: #1b1b1b;
 
-  --line: rgba(17, 17, 22, 0.16);
-  --line-soft: rgba(17, 17, 22, 0.09);
+  /* Surface-aware text + hairlines, so a component can sit on either ground */
+  --text-on-ink: #ffffff;
+  --text-on-ink-lo: rgba(255, 255, 255, 0.62);
+  --text-on-cream: #111111;
+  --text-on-cream-lo: #5e5e58;
+  --line-on-ink: rgba(255, 255, 255, 0.14);
+  --line-on-ink-strong: rgba(255, 255, 255, 0.24);
+  --line-on-cream: rgba(17, 17, 17, 0.13);
+  --line-on-cream-strong: rgba(17, 17, 17, 0.22);
 
-  --shadow-soft: 0 2px 4px rgba(17, 17, 22, 0.08),
-    0 14px 30px -14px rgba(17, 17, 22, 0.25);
-  --shadow-pop: 3px 3px 0 #111116;
+  --line: rgba(17, 17, 17, 0.13);
+  --line-soft: rgba(17, 17, 17, 0.08);
 
-  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
-  --font-mono: "Space Mono", "Courier New", monospace;
+  --shadow-soft: 0 2px 4px rgba(17, 17, 17, 0.06),
+    0 14px 30px -14px rgba(17, 17, 17, 0.22);
+  --shadow-pop: 3px 3px 0 #111111;
+
+  --font-display: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
   --radius-sm: 10px;
   --radius-md: 18px;
   --radius-lg: 28px;
   --radius-pill: 999px;
+
+  --ease-liquid: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* --------------------------------------------------------------- app shell */
@@ -97,10 +121,11 @@
 .tipit-app h2,
 .tipit-app h3 {
   font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0;
   color: var(--ink);
+  text-wrap: balance;
 }
 .tipit-eyebrow {
   display: inline-flex;
@@ -362,7 +387,7 @@
 }
 .tipit-brand {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 20px;
   letter-spacing: -0.02em;
   text-decoration: none;
