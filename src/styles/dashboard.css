@@ -1,21 +1,50 @@
 /* ==========================================================================
-   tipit — creator dashboard
-   Depends on tokens + primitives from tipit.css. Scoped to .tipit-app.
+   tipit — dashboards (creator + fan share this file, so it's the one place
+   that keeps them looking like the same product).
+
+   These screens sit on the ink ground, like the landing page and the tipping
+   page: glass panels over near-black, one coral accent, hairline structure.
+   Depends on tokens + primitives from tipit.css, and on the shell carrying
+   `tipit-ink` alongside `tipit-app` for the re-skinned primitives.
    ========================================================================== */
 
+/* The one authored motion moment on this screen: the headline stat cards
+   rise in together on load. Nothing else here animates on mount — one
+   deliberate moment beats the same fade-in copy-pasted onto every section.
+   Reduced-motion is handled globally by .tipit-app's `*` rule in tipit.css. */
+@keyframes dash-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.stat-grid .stat {
+  animation: dash-rise 0.5s var(--ease-liquid) both;
+}
+.stat-grid .stat:nth-child(1) { animation-delay: 0s; }
+.stat-grid .stat:nth-child(2) { animation-delay: 0.06s; }
+.stat-grid .stat:nth-child(3) { animation-delay: 0.12s; }
+.stat-grid .stat:nth-child(4) { animation-delay: 0.18s; }
+
+/* topbar ----------------------------------------------------------------- */
 .dash-topbar {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(249, 245, 234, 0.94);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line-soft);
+  background: rgba(17, 17, 17, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
 }
 .dash-topbar-inner {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding-block: 16px;
+  padding-block: 14px;
 }
 .dash-topbar-actions {
   margin-left: auto;
@@ -32,62 +61,68 @@
   font-size: 12.5px;
   padding: 8px 14px;
   border-radius: var(--radius-pill);
-  border: 1.5px solid var(--line);
-  background: var(--paper);
-  color: var(--ink);
-  transition: border-color 0.15s ease, background 0.15s ease;
+  border: 1px solid var(--line-on-ink);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-on-ink-lo);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 .dash-link-chip:hover {
-  border-color: var(--ink);
+  border-color: var(--line-on-ink-strong);
+  color: #fff;
 }
 .dash-link-chip.is-copied {
-  border-color: var(--teal);
-  color: var(--teal-deep);
+  border-color: rgba(159, 224, 205, 0.45);
+  color: #9fe0cd;
 }
 
+/* page head -------------------------------------------------------------- */
 .dash-head {
-  padding-block: clamp(24px, 4vw, 40px) 12px;
+  padding-block: clamp(24px, 4vw, 44px) 14px;
 }
 .dash-head h1 {
-  font-size: clamp(26px, 4vw, 36px);
-  margin-top: 6px;
+  font-size: clamp(28px, 4.4vw, 40px);
+  margin-top: 8px;
 }
 
 /* tabs ------------------------------------------------------------------- */
 .dash-tabs {
   display: flex;
-  gap: 6px;
-  border-bottom: 1.5px solid var(--line);
+  gap: 4px;
+  border-bottom: 1px solid var(--line-on-ink);
   margin-bottom: clamp(20px, 4vw, 32px);
   overflow-x: auto;
+  scrollbar-width: none;
+}
+.dash-tabs::-webkit-scrollbar {
+  display: none;
 }
 .dash-tab {
   appearance: none;
   background: none;
   border: none;
-  border-bottom: 2.5px solid transparent;
+  border-bottom: 2px solid transparent;
   padding: 12px 14px;
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 14.5px;
-  color: var(--ink-faint);
+  color: var(--text-on-ink-lo);
   white-space: nowrap;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 .dash-tab:hover {
-  color: var(--ink);
+  color: #fff;
 }
 .dash-tab.is-active {
-  color: var(--ink);
+  color: #fff;
   border-bottom-color: var(--coral);
 }
 
-/* stat grid ------------------------------------------------------------- */
+/* stat grid -------------------------------------------------------------- */
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
-  margin-bottom: 22px;
+  margin-bottom: 26px;
 }
 @media (max-width: 860px) {
   .stat-grid {
@@ -99,52 +134,82 @@
     grid-template-columns: 1fr;
   }
 }
-.stat {
-  background: var(--paper);
-  border: 1.5px solid var(--line);
-  border-radius: var(--radius-md);
-  padding: 18px;
+/* 3-up variant (fan overview, creator payouts) — its own breakpoint rather
+   than reusing .stat-grid's 4-up steps, which would leave an awkward lone
+   third card at the 2-column step. */
+.stat-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
 }
+@media (max-width: 640px) {
+  .stat-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+.stat {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-on-ink);
+  border-radius: var(--radius-md);
+  padding: 18px 18px 20px;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.stat:hover {
+  border-color: var(--line-on-ink-strong);
+  background: rgba(255, 255, 255, 0.07);
+}
+/* The headline number. Coral earns its place here because this card is the
+   one thing on the screen that is literally about money arriving. */
 .stat-accent {
-  border-color: var(--ink);
-  box-shadow: var(--shadow-pop);
+  background: rgba(255, 107, 94, 0.09);
+  border-color: rgba(255, 107, 94, 0.32);
+}
+.stat-accent:hover {
+  background: rgba(255, 107, 94, 0.12);
+  border-color: rgba(255, 107, 94, 0.45);
+}
+.stat-accent .stat-value {
+  color: var(--coral);
 }
 .stat-label {
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--ink-faint);
-  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 10px;
 }
 .stat-value {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 26px;
+  font-size: 28px;
   line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
 }
 .stat-sub {
-  margin: 6px 0 0;
+  margin: 8px 0 0;
   font-size: 12.5px;
-  color: var(--ink-faint);
+  color: rgba(255, 255, 255, 0.52);
 }
 
-/* section blocks ------------------------------------------------------- */
+/* section blocks --------------------------------------------------------- */
 .dash-section {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 .dash-section-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-on-ink);
 }
 .dash-section-head h2 {
   font-size: 18px;
 }
 
-/* activity / transaction list --------------------------------------- */
+/* activity / transaction list -------------------------------------------- */
 .tx-list {
   list-style: none;
   margin: 0;
@@ -156,20 +221,28 @@
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 4px 16px;
-  padding: 14px 0;
-  border-top: 1px solid var(--line-soft);
+  padding: 14px 12px;
+  margin-inline: -12px;
+  border-radius: var(--radius-sm);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background 0.2s ease;
 }
 .tx-row:first-child {
   border-top: none;
+}
+.tx-row:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 .tx-who {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 14.5px;
+  color: #fff;
 }
 .tx-msg {
   font-size: 13.5px;
-  color: var(--ink-soft);
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.58);
   grid-column: 1;
 }
 .tx-msg::before {
@@ -188,11 +261,14 @@
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 15px;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
 }
 .tx-net {
   font-family: var(--font-mono);
   font-size: 11.5px;
-  color: var(--ink-faint);
+  color: rgba(255, 255, 255, 0.45);
+  font-variant-numeric: tabular-nums;
 }
 .tx-meta {
   grid-column: 1;
@@ -201,17 +277,23 @@
   gap: 8px;
   font-family: var(--font-mono);
   font-size: 11.5px;
-  color: var(--ink-faint);
+  color: rgba(255, 255, 255, 0.45);
 }
 
+/* An empty list is a composed state, not a stray sentence: a dashed glass
+   panel reads as "nothing here yet" rather than "something failed". */
 .dash-empty {
   text-align: center;
-  padding: 40px 20px;
-  color: var(--ink-faint);
+  padding: 36px 20px;
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.55);
   font-size: 14px;
+  border: 1px dashed var(--line-on-ink-strong);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
 }
 
-/* my-page editor ----------------------------------------------------- */
+/* my-page editor --------------------------------------------------------- */
 .editor-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
@@ -252,49 +334,53 @@
   gap: 12px;
   position: sticky;
   bottom: 0;
-  background: linear-gradient(transparent, var(--cream) 40%);
+  background: linear-gradient(transparent, var(--ink) 40%);
   padding-top: 16px;
+  padding-bottom: 4px;
 }
 
-/* preview card (mirrors landing hero phone) ------------------------- */
+/* preview card ------------------------------------------------------------
+   This mirrors the real fan page, which is ink + glass — so the preview is
+   now an honest miniature of it rather than a light card that resembled
+   nothing the supporter will actually see. */
 .preview-sticky {
   position: sticky;
   top: 84px;
 }
 .preview-frame {
-  background: var(--cream-deep);
-  border: 1.5px solid var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line-on-ink);
   border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: var(--shadow-pop);
 }
 .preview-tag {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: rgba(255, 255, 255, 0.45);
   margin: 0 0 12px;
 }
 .preview-card {
-  background: var(--paper);
-  border: 1.5px solid var(--line);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-md);
   padding: 22px 18px 18px;
   text-align: center;
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.6);
 }
 .preview-avatar {
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  background: var(--gold);
-  border: 1.5px solid var(--ink);
+  background: linear-gradient(160deg, var(--coral), #c0392f);
   display: grid;
   place-items: center;
   margin: 0 auto 10px;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 17px;
+  color: #fff;
   object-fit: cover;
   overflow: hidden;
 }
@@ -303,10 +389,11 @@
   font-weight: 700;
   font-size: 17px;
   margin: 0 0 3px;
+  color: #fff;
 }
 .preview-bio {
   font-size: 12.5px;
-  color: var(--ink-faint);
+  color: var(--text-on-ink-lo);
   margin: 0 0 16px;
 }
 .preview-amounts {
@@ -318,46 +405,48 @@
   flex: 1;
   padding: 8px 4px;
   border-radius: var(--radius-pill);
-  border: 1.5px solid var(--ink);
-  background: var(--paper);
+  border: 1px solid var(--line-on-ink-strong);
+  background: transparent;
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 12.5px;
+  color: var(--text-on-ink-lo);
 }
 .preview-pill.is-lead {
   background: var(--coral);
-  color: #fff;
-  border-color: var(--coral-deep);
+  color: var(--ink);
+  border-color: transparent;
 }
 .preview-support-btn {
   width: 100%;
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--coral);
+  color: var(--ink);
   border: none;
   border-radius: var(--radius-pill);
   padding: 11px;
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 13px;
 }
 
-/* fan dashboard: favorite creator ------------------------------------ */
+/* fan dashboard: favorite creator ---------------------------------------- */
 .fav-card {
   display: flex;
   align-items: center;
   gap: 18px;
-  background: var(--ink);
-  color: var(--cream);
+  background: rgba(255, 107, 94, 0.08);
+  border: 1px solid rgba(255, 107, 94, 0.28);
+  color: #fff;
   border-radius: var(--radius-lg);
   padding: clamp(18px, 4vw, 26px);
-  margin-bottom: 22px;
+  margin-bottom: 26px;
 }
 .fav-card-avatar {
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  background: var(--gold);
-  color: var(--ink);
+  background: linear-gradient(160deg, var(--coral), #c0392f);
+  color: #fff;
   display: grid;
   place-items: center;
   flex: none;
@@ -380,7 +469,7 @@
   font-size: 10.5px;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: rgba(249, 245, 234, 0.6);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0 0 4px;
 }
 .fav-card-name {
@@ -388,20 +477,15 @@
   font-weight: 700;
   font-size: 19px;
   margin: 0 0 2px;
+  color: #fff;
 }
 .fav-card-sub {
   font-size: 12.5px;
-  color: rgba(249, 245, 234, 0.68);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
 }
 .fav-card .tipit-btn-ghost {
   flex: none;
-  border-color: rgba(249, 245, 234, 0.35);
-  color: var(--cream);
-}
-.fav-card .tipit-btn-ghost:hover {
-  border-color: var(--cream);
-  background: rgba(249, 245, 234, 0.08);
 }
 @media (max-width: 520px) {
   .fav-card {
@@ -409,7 +493,7 @@
   }
 }
 
-/* fan dashboard: creators you support ---------------------------------- */
+/* fan dashboard: creators you support ------------------------------------ */
 .creator-list {
   list-style: none;
   margin: 0;
@@ -419,18 +503,24 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 0;
-  border-top: 1px solid var(--line-soft);
+  padding: 12px;
+  margin-inline: -12px;
+  border-radius: var(--radius-sm);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background 0.2s ease;
 }
 .creator-row:first-child {
   border-top: none;
+}
+.creator-row:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 .creator-row-avatar {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: var(--gold-tint);
-  color: var(--gold-deep);
+  background: rgba(255, 107, 94, 0.16);
+  color: var(--coral);
   display: grid;
   place-items: center;
   flex: none;
@@ -452,42 +542,91 @@
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 14.5px;
+  color: #fff;
 }
 .creator-row-name a {
   text-decoration: none;
+  color: #fff;
 }
 .creator-row-name a:hover {
-  text-decoration: underline;
+  color: var(--coral);
 }
 .creator-row-meta {
   font-family: var(--font-mono);
   font-size: 11.5px;
-  color: var(--ink-faint);
+  color: rgba(255, 255, 255, 0.45);
 }
 .creator-row-amount {
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 14.5px;
   flex: none;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
 }
 
-/* payouts ----------------------------------------------------------- */
+/* payouts ---------------------------------------------------------------- */
 .payout-hero {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  background: var(--ink);
-  color: var(--cream);
+  background: rgba(255, 107, 94, 0.08);
+  border: 1px solid rgba(255, 107, 94, 0.28);
+  color: #fff;
   border-radius: var(--radius-lg);
   padding: clamp(20px, 4vw, 30px);
-  margin-bottom: 22px;
+  margin-bottom: 26px;
 }
 .payout-hero .stat-label {
-  color: rgba(249, 245, 234, 0.6);
+  color: rgba(255, 255, 255, 0.55);
 }
 .payout-hero .stat-value {
-  font-size: 32px;
-  color: var(--gold-tint);
+  font-size: 34px;
+  color: var(--coral);
+}
+
+/* loading skeleton --------------------------------------------------------
+   Matches the real layout's shape (four stat cards, then a list) so the page
+   doesn't reflow when data lands, and so a slow connection reads as loading
+   rather than as an empty dashboard. */
+@keyframes dash-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+.sk {
+  border-radius: var(--radius-sm);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.045) 25%,
+    rgba(255, 255, 255, 0.1) 37%,
+    rgba(255, 255, 255, 0.045) 63%
+  );
+  background-size: 200% 100%;
+  animation: dash-shimmer 1.5s linear infinite;
+}
+.sk-line {
+  height: 12px;
+}
+.sk-head {
+  height: 34px;
+  width: min(280px, 60%);
+  margin-bottom: 10px;
+}
+.sk-sub {
+  height: 12px;
+  width: min(200px, 44%);
+}
+.sk-card {
+  height: 108px;
+  border-radius: var(--radius-md);
+}
+.sk-row {
+  height: 52px;
+  margin-bottom: 10px;
 }

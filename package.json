@@ -1,6 +1,6 @@
 {
   "name": "@tipit/shared",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": false,
   "description": "Shared client modules for the tipit creator + fan sites (design tokens, Supabase client, auth context, helpers).",
   "type": "module",
