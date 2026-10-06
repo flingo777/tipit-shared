@@ -1,7 +1,20 @@
-/** ₹ with Indian digit grouping, no decimals. */
+/** ₹ with Indian digit grouping, no decimals. For whole-rupee UI input. */
 export function inr(amount) {
   const n = Math.round(Number(amount) || 0);
   return "₹" + n.toLocaleString("en-IN");
+}
+
+/**
+ * Format a stored amount. Every money column is integer PAISE, so this is the
+ * one to use for anything read from the database. Paise are shown only when
+ * there are some: 9900 → "₹99", 9405 → "₹94.05".
+ */
+export function inrPaise(paise) {
+  const p = Math.round(Number(paise) || 0);
+  return "₹" + (p / 100).toLocaleString("en-IN", {
+    minimumFractionDigits: p % 100 === 0 ? 0 : 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 /** "2 Sept" / "2 Sept 2024" when the year differs from now. */

@@ -32,12 +32,19 @@ export const supabase = createClient(
 
 export const PLATFORM_FEE_PCT = Number(import.meta.env.VITE_PLATFORM_FEE_PCT ?? 5);
 
-/** Platform fee for a gross amount, rounded to whole rupees (matches the migrations). */
-export function platformFee(amountInr) {
-  return Math.round((amountInr * PLATFORM_FEE_PCT) / 100);
+/** The fee in basis points (500 = 5%), matching the server's PLATFORM_FEE_PCT. */
+export const PLATFORM_FEE_BPS = Math.round(PLATFORM_FEE_PCT * 100);
+
+/**
+ * Display-only mirrors of _shared/money.ts. In PAISE, half-up to the nearest
+ * paisa, so the "creator keeps" line a supporter sees before paying is the
+ * number the server will actually book. The old whole-rupee versions rounded
+ * the fee to ₹5 on a ₹99 tip; the server now books ₹4.95.
+ */
+export function platformFeePaise(amountPaise) {
+  return Math.round((amountPaise * PLATFORM_FEE_BPS) / 10000);
 }
 
-/** What the creator keeps from a gross amount. */
-export function netAmount(amountInr) {
-  return amountInr - platformFee(amountInr);
+export function netPaise(amountPaise) {
+  return amountPaise - platformFeePaise(amountPaise);
 }
