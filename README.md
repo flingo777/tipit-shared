@@ -2,8 +2,8 @@
 
 Client modules shared by the two tipit frontends:
 
-- **`creatorsite`** (`github:flingo777/fanapp-creator`) → `creator-fanapp.vercel.app`
-- **`fansite`** (`github:flingo777/fanapp-fan`) → `fan-fanapp.vercel.app`
+- **`creatorsite`** (`github:flingo777/fanapp-creator`) → `demo.heytipit.com`
+- **`fansite`** (`github:flingo777/fanapp-fan`) → `demofan.heytipit.com`
 
 These files were copy-pasted between the two repos through Phase 0. This package
 is their single source of truth (ENGINEERING.md §7.6).
